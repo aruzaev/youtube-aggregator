@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div>
-      <h1>YouTube Aggregator</h1>
+      <h1>YouTube Aggregator by Artem Ruzaev</h1>
       <input
         type="text"
         value={query}
@@ -40,6 +40,10 @@ function App() {
             allowFullScreen
           ></iframe>
         ))}
+      </div>
+
+      <div className='footer'>
+
       </div>
     </div>
   );
