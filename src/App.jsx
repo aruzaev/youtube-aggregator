@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [query, setQuery] = useState('');
+    const [videos, setVideos] = useState([]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    const searchVideos = async () => {
+        const response = await axios.get(`/api/search?q=${query}`);
+        setVideos(response.data.items);
+    };
+
+    return (
+        <div>
+            <h1>YouTube Aggregator</h1>
+            <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Enter search query"
+            />
+            <button onClick={searchVideos}>Search</button>
+            <div id="results">
+                {videos.map((item) => (
+                    <iframe
+                        key={item.id.videoId}
+                        src={`https://www.youtube.com/embed/${item.id.videoId}`}
+                        width="560"
+                        height="315"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
+                ))}
+            </div>
+        </div>
+    );
 }
 
-export default App
+export default App;
